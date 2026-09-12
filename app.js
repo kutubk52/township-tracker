@@ -2,6 +2,39 @@ const STORAGE_KEY = "township-tracker-v1";
 
 const seedItems = [
   {
+    name: "Frozen Yogurt",
+    source: "Ice Cream Factory",
+    level: 27,
+    minutes: 120,
+    coins: 38,
+    ingredients: [
+      { name: "Sugar", qty: 1 },
+      { name: "Yogurt", qty: 2 },
+    ],
+  },
+  {
+    name: "Ice Cream Bar",
+    source: "Ice Cream Factory",
+    level: 28,
+    minutes: 60,
+    coins: 35,
+    ingredients: [
+      { name: "Ice Cream Cone", qty: 1 },
+      { name: "Chocolate", qty: 1 },
+    ],
+  },
+  {
+    name: "Chocolate",
+    source: "Chocolate Factory",
+    level: 26,
+    minutes: 90,
+    coins: 32,
+    ingredients: [
+      { name: "Cacao", qty: 2 },
+      { name: "Sugar", qty: 1 },
+    ],
+  },
+  {
     name: "Wheat",
     source: "Field",
     level: 1,
