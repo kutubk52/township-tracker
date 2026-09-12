@@ -369,9 +369,21 @@ function buildProductionDemand(nested) {
 }
 
 function renderDatalist() {
+  const itemOptions = state.items
+    .slice()
+    .sort((a, b) => (a.source || "Unknown").localeCompare(b.source || "Unknown") || a.name.localeCompare(b.name));
+  const groupedOptions = itemOptions.reduce((markup, item, index, list) => {
+    const source = item.source || "Unknown";
+    const previousSource = list[index - 1]?.source || "Unknown";
+    const nextSource = list[index + 1]?.source || "Unknown";
+    const open = index === 0 || source !== previousSource ? `<optgroup label="${source}">` : "";
+    const close = index === list.length - 1 || source !== nextSource ? "</optgroup>" : "";
+    return `${markup}${open}<option value="${item.name}">${item.name}</option>${close}`;
+  }, "");
   byId("itemNames").innerHTML = state.items
     .map((item) => `<option value="${item.name}"></option>`)
     .join("");
+  byId("inventoryItem").innerHTML = `<option value="">Select item</option>${groupedOptions}<option value="__custom">Custom item...</option>`;
 }
 
 function renderInventory() {
@@ -575,12 +587,22 @@ byId("orderForm").addEventListener("submit", (event) => {
 
 byId("inventoryForm").addEventListener("submit", (event) => {
   event.preventDefault();
-  const name = byId("inventoryItem").value.trim();
+  const selected = byId("inventoryItem").value.trim();
+  const custom = byId("customInventoryItem").value.trim();
+  const name = selected === "__custom" ? custom : selected;
   if (!name) return;
   state.inventory[name] = Number(byId("inventoryQty").value) || 0;
   event.target.reset();
   byId("inventoryQty").value = 0;
+  byId("customInventoryLabel").classList.add("hidden");
   renderAll();
+});
+
+byId("inventoryItem").addEventListener("change", () => {
+  const isCustom = byId("inventoryItem").value === "__custom";
+  byId("customInventoryLabel").classList.toggle("hidden", !isCustom);
+  byId("customInventoryItem").required = isCustom;
+  if (isCustom) byId("customInventoryItem").focus();
 });
 
 byId("capacityForm").addEventListener("submit", (event) => {

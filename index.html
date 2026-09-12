@@ -78,7 +78,11 @@
             <form id="inventoryForm" class="inventory-form">
               <label>
                 Item
-                <input id="inventoryItem" list="itemNames" autocomplete="off" required>
+                <select id="inventoryItem" required></select>
+              </label>
+              <label id="customInventoryLabel" class="custom-inventory hidden">
+                Custom item name
+                <input id="customInventoryItem" autocomplete="off" placeholder="Type item name">
               </label>
               <label>
                 Quantity you have

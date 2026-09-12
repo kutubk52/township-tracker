@@ -34,7 +34,7 @@ select {
 }
 
 button {
-  min-height: 40px;
+  min-height: 44px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--panel-strong);
@@ -191,12 +191,13 @@ label {
 input,
 select {
   width: 100%;
-  min-height: 40px;
+  min-height: 44px;
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 9px 10px;
   background: white;
   color: var(--ink);
+  font-size: 1rem;
 }
 
 input:focus,
@@ -215,6 +216,14 @@ select:focus {
   display: grid;
   grid-template-columns: minmax(180px, 1fr) 160px;
   gap: 12px;
+}
+
+.custom-inventory {
+  grid-column: 1 / -1;
+}
+
+.hidden {
+  display: none;
 }
 
 .capacity-form {
@@ -330,7 +339,7 @@ select:focus {
 }
 
 .icon-button {
-  min-height: 40px;
+  min-height: 44px;
   padding: 0;
   color: var(--red);
 }
@@ -344,7 +353,7 @@ select:focus {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 40px;
+  min-height: 44px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: white;
@@ -673,12 +682,51 @@ button:disabled {
 
 @media (max-width: 560px) {
   .app-shell {
+    padding: 12px;
+  }
+
+  .topbar {
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  h1 {
+    font-size: 2rem;
+    line-height: 1.05;
+  }
+
+  .panel {
     padding: 14px;
   }
 
-  .summary-strip,
-  .tabs,
+  .summary-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .summary-strip div {
+    padding: 10px;
+  }
+
+  .summary-strip span {
+    font-size: 1.18rem;
+  }
+
+  .tabs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    padding: 8px 0;
+    background: var(--bg);
+  }
+
+  .tab {
+    min-height: 48px;
+  }
+
   .capacity-form,
+  .inventory-form,
   .order-line {
     grid-template-columns: 1fr;
   }
