@@ -1003,6 +1003,18 @@ const seedItems = [
     ingredients: [{ name: "Corn", qty: 4 }],
   },
   {
+    name: "Brownie",
+    source: "Pastry Factory",
+    level: 28,
+    minutes: 45,
+    coins: 52,
+    ingredients: [
+      { name: "Cacao", qty: 2 },
+      { name: "Syrup", qty: 1 },
+      { name: "Butter", qty: 1 },
+    ],
+  },
+  {
     name: "Cacao",
     source: "Tropical Isle",
     level: 29,
