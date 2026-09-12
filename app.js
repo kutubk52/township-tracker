@@ -1,107 +1,988 @@
 const STORAGE_KEY = "township-tracker-v1";
 
 const seedItems = [
-  { name: "Wheat", source: "Field", level: 1, minutes: 2, coins: 1, ingredients: [] },
-  { name: "Corn", source: "Field", level: 4, minutes: 5, coins: 1, ingredients: [] },
-  { name: "Carrot", source: "Field", level: 5, minutes: 10, coins: 2, ingredients: [] },
-  { name: "Sugarcane", source: "Field", level: 7, minutes: 20, coins: 3, ingredients: [] },
-  { name: "Cotton", source: "Field", level: 9, minutes: 30, coins: 4, ingredients: [] },
-  { name: "Wool", source: "Sheep Farm", level: 10, minutes: 240, coins: 12, ingredients: [{ name: "Sheep Feed", qty: 1 }] },
-  { name: "Strawberry", source: "Field", level: 12, minutes: 60, coins: 5, ingredients: [] },
-  { name: "Tomato", source: "Field", level: 16, minutes: 120, coins: 6, ingredients: [] },
-  { name: "Pine Tree", source: "Field", level: 18, minutes: 180, coins: 8, ingredients: [] },
-  { name: "Potato", source: "Field", level: 22, minutes: 240, coins: 10, ingredients: [] },
-  { name: "Rubber Tree", source: "Field", level: 29, minutes: 240, coins: 10, ingredients: [] },
-  { name: "Rice", source: "Field", level: 56, minutes: 80, coins: 7, ingredients: [] },
-  { name: "Mushroom", source: "Field", level: 63, minutes: 150, coins: 9, ingredients: [] },
-  { name: "Peanut Plant", source: "Field", level: 62, minutes: 30, coins: 5, ingredients: [] },
-  { name: "Pepper", source: "Field", level: 29, minutes: 60, coins: 7, ingredients: [] },
-  { name: "Fish", source: "Fishermen's Isle", level: 29, minutes: 480, coins: 12, ingredients: [] },
-  { name: "Banana", source: "Tropical Isle", level: 35, minutes: 420, coins: 8, ingredients: [] },
-  { name: "Olives", source: "Olivia Isle", level: 45, minutes: 420, coins: 9, ingredients: [] },
-  { name: "Silk", source: "Olivia Isle", level: 31, minutes: 420, coins: 9, ingredients: [] },
-  { name: "Colorful Feather", source: "Tropical Isle", level: 50, minutes: 480, coins: 12, ingredients: [] },
-  { name: "Pearls", source: "Fishermen's Isle", level: 56, minutes: 480, coins: 15, ingredients: [] },
-  { name: "Tea Plant", source: "Field", level: 84, minutes: 180, coins: 9, ingredients: [] },
-  { name: "Glass", source: "Construction Material", level: 5, minutes: 0, coins: 0, ingredients: [] },
-  { name: "Bricks", source: "Construction Material", level: 5, minutes: 0, coins: 0, ingredients: [] },
-  { name: "Slabs", source: "Construction Material", level: 5, minutes: 0, coins: 0, ingredients: [] },
-  { name: "Paint", source: "Barn Upgrade Tool", level: 5, minutes: 0, coins: 0, ingredients: [] },
-  { name: "Nail", source: "Barn Upgrade Tool", level: 5, minutes: 0, coins: 0, ingredients: [] },
-  { name: "Hammer", source: "Barn Upgrade Tool", level: 5, minutes: 0, coins: 0, ingredients: [] },
-  { name: "Shovel", source: "Expansion Tool", level: 1, minutes: 0, coins: 0, ingredients: [] },
-  { name: "Axe", source: "Expansion Tool", level: 1, minutes: 0, coins: 0, ingredients: [] },
-  { name: "Saw", source: "Expansion Tool", level: 1, minutes: 0, coins: 0, ingredients: [] },
-  { name: "Jackhammer", source: "Tool Exchange", level: 62, minutes: 0, coins: 0, ingredients: [] },
-  { name: "Electric Saw", source: "Tool Exchange", level: 60, minutes: 0, coins: 0, ingredients: [] },
-  { name: "Drill", source: "Tool Exchange", level: 60, minutes: 0, coins: 0, ingredients: [] },
-  { name: "Milk", source: "Cowshed", level: 1, minutes: 20, coins: 3, ingredients: [{ name: "Cow Feed", qty: 1 }] },
-  { name: "Egg", source: "Chicken Coop", level: 3, minutes: 60, coins: 8, ingredients: [{ name: "Chicken Feed", qty: 1 }] },
-  { name: "Bacon", source: "Pig Farm", level: 32, minutes: 420, coins: 18, ingredients: [{ name: "Pig Feed", qty: 1 }] },
-  { name: "Cow Feed", source: "Feed Mill", level: 3, minutes: 5, coins: 1, ingredients: [{ name: "Wheat", qty: 2 }, { name: "Corn", qty: 1 }] },
-  { name: "Chicken Feed", source: "Feed Mill", level: 3, minutes: 10, coins: 2, ingredients: [{ name: "Wheat", qty: 2 }, { name: "Carrot", qty: 1 }] },
-  { name: "Sheep Feed", source: "Feed Mill", level: 10, minutes: 15, coins: 3, ingredients: [{ name: "Wheat", qty: 2 }, { name: "Carrot", qty: 2 }] },
-  { name: "Pig Feed", source: "Feed Mill", level: 32, minutes: 20, coins: 4, ingredients: [{ name: "Carrot", qty: 2 }, { name: "Corn", qty: 2 }] },
-  { name: "Bread", source: "Bakery", level: 2, minutes: 5, coins: 5, ingredients: [{ name: "Wheat", qty: 2 }] },
-  { name: "Cookies", source: "Bakery", level: 5, minutes: 15, coins: 44, ingredients: [{ name: "Wheat", qty: 2 }, { name: "Egg", qty: 2 }] },
-  { name: "Bagel", source: "Bakery", level: 8, minutes: 30, coins: 55, ingredients: [{ name: "Wheat", qty: 2 }, { name: "Egg", qty: 3 }, { name: "Sugar", qty: 1 }] },
-  { name: "Pizza", source: "Bakery", level: 22, minutes: 60, coins: 68, ingredients: [{ name: "Wheat", qty: 2 }, { name: "Cheese", qty: 1 }, { name: "Tomato", qty: 2 }] },
-  { name: "Potato Bread", source: "Bakery", level: 26, minutes: 120, coins: 158, ingredients: [{ name: "Wheat", qty: 2 }, { name: "Potato", qty: 2 }, { name: "Egg", qty: 4 }] },
-  { name: "Cream", source: "Dairy Factory", level: 4, minutes: 15, coins: 12, ingredients: [{ name: "Milk", qty: 1 }] },
-  { name: "Cheese", source: "Dairy Factory", level: 6, minutes: 30, coins: 25, ingredients: [{ name: "Milk", qty: 2 }] },
-  { name: "Butter", source: "Dairy Factory", level: 11, minutes: 60, coins: 39, ingredients: [{ name: "Milk", qty: 3 }] },
-  { name: "Yogurt", source: "Dairy Factory", level: 21, minutes: 90, coins: 53, ingredients: [{ name: "Milk", qty: 4 }] },
-  { name: "Sugar", source: "Sugar Factory", level: 7, minutes: 20, coins: 14, ingredients: [{ name: "Sugarcane", qty: 1 }] },
-  { name: "Syrup", source: "Sugar Factory", level: 17, minutes: 40, coins: 29, ingredients: [{ name: "Sugarcane", qty: 2 }] },
-  { name: "Caramel", source: "Sugar Factory", level: 24, minutes: 90, coins: 45, ingredients: [{ name: "Sugarcane", qty: 3 }] },
-  { name: "Cotton Fabric", source: "Textile Factory", level: 9, minutes: 30, coins: 37, ingredients: [{ name: "Cotton", qty: 2 }] },
-  { name: "Yarn", source: "Textile Factory", level: 10, minutes: 40, coins: 61, ingredients: [{ name: "Wool", qty: 2 }] },
-  { name: "Silk Fabric", source: "Textile Factory", level: 31, minutes: 90, coins: 140, ingredients: [{ name: "Silk", qty: 2 }] },
-  { name: "Nylon Thread", source: "Textile Factory", level: 36, minutes: 120, coins: 111, ingredients: [{ name: "Rubber Tree", qty: 3 }] },
-  { name: "Shirt", source: "Tailor Shop", level: 12, minutes: 60, coins: 45, ingredients: [{ name: "Cotton Fabric", qty: 1 }] },
-  { name: "Sweater", source: "Tailor Shop", level: 14, minutes: 90, coins: 76, ingredients: [{ name: "Yarn", qty: 1 }] },
-  { name: "Coat", source: "Tailor Shop", level: 20, minutes: 120, coins: 125, ingredients: [{ name: "Cotton Fabric", qty: 1 }, { name: "Yarn", qty: 1 }] },
-  { name: "Hat", source: "Tailor Shop", level: 31, minutes: 150, coins: 231, ingredients: [{ name: "Cotton Fabric", qty: 1 }, { name: "Silk Fabric", qty: 1 }] },
-  { name: "Dress", source: "Tailor Shop", level: 33, minutes: 180, coins: 268, ingredients: [{ name: "Yarn", qty: 1 }, { name: "Silk Fabric", qty: 1 }] },
-  { name: "Suit", source: "Tailor Shop", level: 36, minutes: 240, coins: 330, ingredients: [{ name: "Yarn", qty: 1 }, { name: "Cotton Fabric", qty: 1 }, { name: "Silk Fabric", qty: 1 }] },
-  { name: "Tyrolean Hat", source: "Tailor Shop", level: 50, minutes: 165, coins: 274, ingredients: [{ name: "Cotton Fabric", qty: 1 }, { name: "Silk Fabric", qty: 1 }, { name: "Colorful Feather", qty: 1 }] },
-  { name: "Gown", source: "Tailor Shop", level: 87, minutes: 210, coins: 815, ingredients: [{ name: "Silk Fabric", qty: 2 }, { name: "Pearls", qty: 5 }] },
-  { name: "Rubber", source: "Rubber Factory", level: 29, minutes: 60, coins: 26, ingredients: [{ name: "Rubber Tree", qty: 1 }] },
-  { name: "Glue", source: "Rubber Factory", level: 52, minutes: 120, coins: 75, ingredients: [{ name: "Rubber Tree", qty: 2 }] },
-  { name: "Paper", source: "Paper Factory", level: 18, minutes: 90, coins: 19, ingredients: [{ name: "Pine Tree", qty: 1 }] },
-  { name: "Paper Towel", source: "Paper Factory", level: 23, minutes: 150, coins: 39, ingredients: [{ name: "Pine Tree", qty: 2 }] },
-  { name: "Wallpaper", source: "Paper Factory", level: 30, minutes: 180, coins: 147, ingredients: [{ name: "Pine Tree", qty: 2 }, { name: "Rubber", qty: 1 }] },
-  { name: "Book", source: "Paper Factory", level: 52, minutes: 210, coins: 304, ingredients: [{ name: "Paper", qty: 4 }, { name: "Cotton Fabric", qty: 1 }, { name: "Glue", qty: 1 }] },
-  { name: "Tea Bags", source: "Paper Factory", level: 85, minutes: 15, coins: 93, ingredients: [{ name: "Paper", qty: 1 }, { name: "Tea Plant", qty: 1 }] },
-  { name: "Muffin", source: "Pastry Factory", level: 24, minutes: 30, coins: 46, ingredients: [{ name: "Sugar", qty: 1 }, { name: "Egg", qty: 4 }, { name: "Wheat", qty: 3 }] },
-  { name: "Cupcake", source: "Pastry Factory", level: 30, minutes: 60, coins: 61, ingredients: [{ name: "Sugar", qty: 1 }, { name: "Egg", qty: 5 }, { name: "Cream", qty: 1 }] },
-  { name: "Donut", source: "Pastry Factory", level: 33, minutes: 90, coins: 88, ingredients: [{ name: "Bagel", qty: 1 }, { name: "Caramel", qty: 1 }, { name: "Cacao", qty: 1 }] },
-  { name: "Ice Cream Cone", source: "Ice Cream Factory", level: 20, minutes: 30, coins: 32, ingredients: [{ name: "Milk", qty: 1 }, { name: "Sugar", qty: 1 }, { name: "Cream", qty: 1 }] },
-  { name: "Popsicle", source: "Ice Cream Factory", level: 21, minutes: 90, coins: 44, ingredients: [{ name: "Sugar", qty: 2 }, { name: "Strawberry", qty: 2 }] },
-  { name: "Popcorn", source: "Snack Factory", level: 8, minutes: 30, coins: 10, ingredients: [{ name: "Corn", qty: 2 }] },
-  { name: "Corn Chips", source: "Snack Factory", level: 19, minutes: 60, coins: 15, ingredients: [{ name: "Corn", qty: 3 }] },
-  { name: "Granola", source: "Snack Factory", level: 23, minutes: 90, coins: 45, ingredients: [{ name: "Wheat", qty: 2 }, { name: "Strawberry", qty: 2 }] },
-  { name: "Potato Chips", source: "Snack Factory", level: 29, minutes: 120, coins: 50, ingredients: [{ name: "Potato", qty: 2 }] },
-  { name: "Canape", source: "Snack Factory", level: 46, minutes: 90, coins: 69, ingredients: [{ name: "Bread", qty: 1 }, { name: "Cheese", qty: 2 }, { name: "Olives", qty: 2 }] },
-  { name: "Glazed Bacon", source: "Snack Factory", level: 54, minutes: 240, coins: 75, ingredients: [{ name: "Bacon", qty: 2 }, { name: "Caramel", qty: 1 }] },
-  { name: "Puffed Rice", source: "Snack Factory", level: 57, minutes: 90, coins: 52, ingredients: [{ name: "Rice", qty: 4 }, { name: "Syrup", qty: 1 }] },
-  { name: "Dried Mushrooms", source: "Snack Factory", level: 63, minutes: 150, coins: 55, ingredients: [{ name: "Mushroom", qty: 3 }] },
-  { name: "Salted Peanuts", source: "Snack Factory", level: 66, minutes: 60, coins: 58, ingredients: [{ name: "Peanut Plant", qty: 3 }] },
-  { name: "Milkshake", source: "Fast Food Restaurant", level: 13, minutes: 15, coins: 22, ingredients: [{ name: "Milk", qty: 2 }, { name: "Strawberry", qty: 1 }] },
-  { name: "Cheeseburger", source: "Fast Food Restaurant", level: 19, minutes: 30, coins: 48, ingredients: [{ name: "Bread", qty: 2 }, { name: "Cheese", qty: 1 }, { name: "Tomato", qty: 1 }] },
-  { name: "Sandwich", source: "Fast Food Restaurant", level: 23, minutes: 60, coins: 52, ingredients: [{ name: "Bread", qty: 2 }, { name: "Butter", qty: 1 }, { name: "Strawberry", qty: 2 }] },
-  { name: "French Fries", source: "Fast Food Restaurant", level: 25, minutes: 45, coins: 55, ingredients: [{ name: "Potato", qty: 2 }, { name: "Cream", qty: 1 }] },
-  { name: "Baked Potato", source: "Fast Food Restaurant", level: 28, minutes: 45, coins: 80, ingredients: [{ name: "Potato", qty: 2 }, { name: "Cheese", qty: 2 }] },
-  { name: "Fish Burger", source: "Fast Food Restaurant", level: 30, minutes: 90, coins: 110, ingredients: [{ name: "Bread", qty: 2 }, { name: "Fish", qty: 1 }, { name: "Pepper", qty: 2 }] },
-  { name: "Fish and Chips", source: "Fast Food Restaurant", level: 41, minutes: 120, coins: 130, ingredients: [{ name: "Fish", qty: 2 }, { name: "Potato", qty: 2 }] },
-  { name: "Peanut Butter", source: "Snack Factory", level: 62, minutes: 60, coins: 48, ingredients: [{ name: "Peanut Plant", qty: 2 }] },
-  { name: "Peanut Butter Crepes", source: "Fast Food Restaurant", level: 63, minutes: 90, coins: 115, ingredients: [{ name: "Bread", qty: 2 }, { name: "Peanut Butter", qty: 1 }, { name: "Banana", qty: 2 }] },
-  { name: "Cacao", source: "Tropical Isle", level: 29, minutes: 480, coins: 12, ingredients: [] }
+  {
+    name: "Wheat",
+    source: "Field",
+    level: 1,
+    minutes: 2,
+    coins: 1,
+    ingredients: [],
+  },
+  {
+    name: "Corn",
+    source: "Field",
+    level: 4,
+    minutes: 5,
+    coins: 1,
+    ingredients: [],
+  },
+  {
+    name: "Carrot",
+    source: "Field",
+    level: 5,
+    minutes: 10,
+    coins: 2,
+    ingredients: [],
+  },
+  {
+    name: "Sugarcane",
+    source: "Field",
+    level: 7,
+    minutes: 20,
+    coins: 3,
+    ingredients: [],
+  },
+  {
+    name: "Cotton",
+    source: "Field",
+    level: 9,
+    minutes: 30,
+    coins: 4,
+    ingredients: [],
+  },
+  {
+    name: "Wool",
+    source: "Sheep Farm",
+    level: 10,
+    minutes: 240,
+    coins: 12,
+    ingredients: [{ name: "Sheep Feed", qty: 1 }],
+  },
+  {
+    name: "Strawberry",
+    source: "Field",
+    level: 12,
+    minutes: 60,
+    coins: 5,
+    ingredients: [],
+  },
+  {
+    name: "Tomato",
+    source: "Field",
+    level: 16,
+    minutes: 120,
+    coins: 6,
+    ingredients: [],
+  },
+  {
+    name: "Pine Tree",
+    source: "Field",
+    level: 18,
+    minutes: 180,
+    coins: 8,
+    ingredients: [],
+  },
+  {
+    name: "Potato",
+    source: "Field",
+    level: 22,
+    minutes: 240,
+    coins: 10,
+    ingredients: [],
+  },
+  {
+    name: "Rubber Tree",
+    source: "Field",
+    level: 29,
+    minutes: 240,
+    coins: 10,
+    ingredients: [],
+  },
+  {
+    name: "Rice",
+    source: "Field",
+    level: 56,
+    minutes: 80,
+    coins: 7,
+    ingredients: [],
+  },
+  {
+    name: "Mushroom",
+    source: "Field",
+    level: 63,
+    minutes: 150,
+    coins: 9,
+    ingredients: [],
+  },
+  {
+    name: "Peanut Plant",
+    source: "Field",
+    level: 62,
+    minutes: 30,
+    coins: 5,
+    ingredients: [],
+  },
+  {
+    name: "Pepper",
+    source: "Field",
+    level: 29,
+    minutes: 60,
+    coins: 7,
+    ingredients: [],
+  },
+  {
+    name: "Fish",
+    source: "Fishermen's Isle",
+    level: 29,
+    minutes: 480,
+    coins: 12,
+    ingredients: [],
+  },
+  {
+    name: "Banana",
+    source: "Tropical Isle",
+    level: 35,
+    minutes: 420,
+    coins: 8,
+    ingredients: [],
+  },
+  {
+    name: "Olives",
+    source: "Olivia Isle",
+    level: 45,
+    minutes: 420,
+    coins: 9,
+    ingredients: [],
+  },
+  {
+    name: "Silk",
+    source: "Olivia Isle",
+    level: 31,
+    minutes: 420,
+    coins: 9,
+    ingredients: [],
+  },
+  {
+    name: "Colorful Feather",
+    source: "Tropical Isle",
+    level: 50,
+    minutes: 480,
+    coins: 12,
+    ingredients: [],
+  },
+  {
+    name: "Pearls",
+    source: "Fishermen's Isle",
+    level: 56,
+    minutes: 480,
+    coins: 15,
+    ingredients: [],
+  },
+  {
+    name: "Tea Plant",
+    source: "Field",
+    level: 84,
+    minutes: 180,
+    coins: 9,
+    ingredients: [],
+  },
+  {
+    name: "Glass",
+    source: "Construction Material",
+    level: 5,
+    minutes: 0,
+    coins: 0,
+    ingredients: [],
+  },
+  {
+    name: "Bricks",
+    source: "Construction Material",
+    level: 5,
+    minutes: 0,
+    coins: 0,
+    ingredients: [],
+  },
+  {
+    name: "Slabs",
+    source: "Construction Material",
+    level: 5,
+    minutes: 0,
+    coins: 0,
+    ingredients: [],
+  },
+  {
+    name: "Paint",
+    source: "Barn Upgrade Tool",
+    level: 5,
+    minutes: 0,
+    coins: 0,
+    ingredients: [],
+  },
+  {
+    name: "Nail",
+    source: "Barn Upgrade Tool",
+    level: 5,
+    minutes: 0,
+    coins: 0,
+    ingredients: [],
+  },
+  {
+    name: "Hammer",
+    source: "Barn Upgrade Tool",
+    level: 5,
+    minutes: 0,
+    coins: 0,
+    ingredients: [],
+  },
+  {
+    name: "Shovel",
+    source: "Expansion Tool",
+    level: 1,
+    minutes: 0,
+    coins: 0,
+    ingredients: [],
+  },
+  {
+    name: "Axe",
+    source: "Expansion Tool",
+    level: 1,
+    minutes: 0,
+    coins: 0,
+    ingredients: [],
+  },
+  {
+    name: "Saw",
+    source: "Expansion Tool",
+    level: 1,
+    minutes: 0,
+    coins: 0,
+    ingredients: [],
+  },
+  {
+    name: "Jackhammer",
+    source: "Tool Exchange",
+    level: 62,
+    minutes: 0,
+    coins: 0,
+    ingredients: [],
+  },
+  {
+    name: "Electric Saw",
+    source: "Tool Exchange",
+    level: 60,
+    minutes: 0,
+    coins: 0,
+    ingredients: [],
+  },
+  {
+    name: "Drill",
+    source: "Tool Exchange",
+    level: 60,
+    minutes: 0,
+    coins: 0,
+    ingredients: [],
+  },
+  {
+    name: "Milk",
+    source: "Cowshed",
+    level: 1,
+    minutes: 20,
+    coins: 3,
+    ingredients: [{ name: "Cow Feed", qty: 1 }],
+  },
+  {
+    name: "Egg",
+    source: "Chicken Coop",
+    level: 3,
+    minutes: 60,
+    coins: 8,
+    ingredients: [{ name: "Chicken Feed", qty: 1 }],
+  },
+  {
+    name: "Bacon",
+    source: "Pig Farm",
+    level: 32,
+    minutes: 420,
+    coins: 18,
+    ingredients: [{ name: "Pig Feed", qty: 1 }],
+  },
+  {
+    name: "Cow Feed",
+    source: "Feed Mill",
+    level: 3,
+    minutes: 5,
+    coins: 1,
+    ingredients: [
+      { name: "Wheat", qty: 2 },
+      { name: "Corn", qty: 1 },
+    ],
+  },
+  {
+    name: "Chicken Feed",
+    source: "Feed Mill",
+    level: 3,
+    minutes: 10,
+    coins: 2,
+    ingredients: [
+      { name: "Wheat", qty: 2 },
+      { name: "Carrot", qty: 1 },
+    ],
+  },
+  {
+    name: "Sheep Feed",
+    source: "Feed Mill",
+    level: 10,
+    minutes: 15,
+    coins: 3,
+    ingredients: [
+      { name: "Wheat", qty: 2 },
+      { name: "Carrot", qty: 2 },
+    ],
+  },
+  {
+    name: "Pig Feed",
+    source: "Feed Mill",
+    level: 32,
+    minutes: 20,
+    coins: 4,
+    ingredients: [
+      { name: "Carrot", qty: 2 },
+      { name: "Corn", qty: 2 },
+    ],
+  },
+  {
+    name: "Bread",
+    source: "Bakery",
+    level: 2,
+    minutes: 5,
+    coins: 5,
+    ingredients: [{ name: "Wheat", qty: 2 }],
+  },
+  {
+    name: "Cookies",
+    source: "Bakery",
+    level: 5,
+    minutes: 15,
+    coins: 44,
+    ingredients: [
+      { name: "Wheat", qty: 2 },
+      { name: "Egg", qty: 2 },
+    ],
+  },
+  {
+    name: "Bagel",
+    source: "Bakery",
+    level: 8,
+    minutes: 30,
+    coins: 55,
+    ingredients: [
+      { name: "Wheat", qty: 2 },
+      { name: "Egg", qty: 3 },
+      { name: "Sugar", qty: 1 },
+    ],
+  },
+  {
+    name: "Pizza",
+    source: "Bakery",
+    level: 22,
+    minutes: 60,
+    coins: 68,
+    ingredients: [
+      { name: "Wheat", qty: 2 },
+      { name: "Cheese", qty: 1 },
+      { name: "Tomato", qty: 2 },
+    ],
+  },
+  {
+    name: "Potato Bread",
+    source: "Bakery",
+    level: 26,
+    minutes: 120,
+    coins: 158,
+    ingredients: [
+      { name: "Wheat", qty: 2 },
+      { name: "Potato", qty: 2 },
+      { name: "Egg", qty: 4 },
+    ],
+  },
+  {
+    name: "Cream",
+    source: "Dairy Factory",
+    level: 4,
+    minutes: 15,
+    coins: 12,
+    ingredients: [{ name: "Milk", qty: 1 }],
+  },
+  {
+    name: "Cheese",
+    source: "Dairy Factory",
+    level: 6,
+    minutes: 30,
+    coins: 25,
+    ingredients: [{ name: "Milk", qty: 2 }],
+  },
+  {
+    name: "Butter",
+    source: "Dairy Factory",
+    level: 11,
+    minutes: 60,
+    coins: 39,
+    ingredients: [{ name: "Milk", qty: 3 }],
+  },
+  {
+    name: "Yogurt",
+    source: "Dairy Factory",
+    level: 21,
+    minutes: 90,
+    coins: 53,
+    ingredients: [{ name: "Milk", qty: 4 }],
+  },
+  {
+    name: "Sugar",
+    source: "Sugar Factory",
+    level: 7,
+    minutes: 20,
+    coins: 14,
+    ingredients: [{ name: "Sugarcane", qty: 1 }],
+  },
+  {
+    name: "Syrup",
+    source: "Sugar Factory",
+    level: 17,
+    minutes: 40,
+    coins: 29,
+    ingredients: [{ name: "Sugarcane", qty: 2 }],
+  },
+  {
+    name: "Caramel",
+    source: "Sugar Factory",
+    level: 24,
+    minutes: 90,
+    coins: 45,
+    ingredients: [{ name: "Sugarcane", qty: 3 }],
+  },
+  {
+    name: "Cotton Fabric",
+    source: "Textile Factory",
+    level: 9,
+    minutes: 30,
+    coins: 37,
+    ingredients: [{ name: "Cotton", qty: 2 }],
+  },
+  {
+    name: "Yarn",
+    source: "Textile Factory",
+    level: 10,
+    minutes: 40,
+    coins: 61,
+    ingredients: [{ name: "Wool", qty: 2 }],
+  },
+  {
+    name: "Silk Fabric",
+    source: "Textile Factory",
+    level: 31,
+    minutes: 90,
+    coins: 140,
+    ingredients: [{ name: "Silk", qty: 2 }],
+  },
+  {
+    name: "Nylon Thread",
+    source: "Textile Factory",
+    level: 36,
+    minutes: 120,
+    coins: 111,
+    ingredients: [{ name: "Rubber Tree", qty: 3 }],
+  },
+  {
+    name: "Shirt",
+    source: "Tailor Shop",
+    level: 12,
+    minutes: 60,
+    coins: 45,
+    ingredients: [{ name: "Cotton Fabric", qty: 1 }],
+  },
+  {
+    name: "Sweater",
+    source: "Tailor Shop",
+    level: 14,
+    minutes: 90,
+    coins: 76,
+    ingredients: [{ name: "Yarn", qty: 1 }],
+  },
+  {
+    name: "Coat",
+    source: "Tailor Shop",
+    level: 20,
+    minutes: 120,
+    coins: 125,
+    ingredients: [
+      { name: "Cotton Fabric", qty: 1 },
+      { name: "Yarn", qty: 1 },
+    ],
+  },
+  {
+    name: "Hat",
+    source: "Tailor Shop",
+    level: 31,
+    minutes: 150,
+    coins: 231,
+    ingredients: [
+      { name: "Cotton Fabric", qty: 1 },
+      { name: "Silk Fabric", qty: 1 },
+    ],
+  },
+  {
+    name: "Dress",
+    source: "Tailor Shop",
+    level: 33,
+    minutes: 180,
+    coins: 268,
+    ingredients: [
+      { name: "Yarn", qty: 1 },
+      { name: "Silk Fabric", qty: 1 },
+    ],
+  },
+  {
+    name: "Suit",
+    source: "Tailor Shop",
+    level: 36,
+    minutes: 240,
+    coins: 330,
+    ingredients: [
+      { name: "Yarn", qty: 1 },
+      { name: "Cotton Fabric", qty: 1 },
+      { name: "Silk Fabric", qty: 1 },
+    ],
+  },
+  {
+    name: "Tyrolean Hat",
+    source: "Tailor Shop",
+    level: 50,
+    minutes: 165,
+    coins: 274,
+    ingredients: [
+      { name: "Cotton Fabric", qty: 1 },
+      { name: "Silk Fabric", qty: 1 },
+      { name: "Colorful Feather", qty: 1 },
+    ],
+  },
+  {
+    name: "Gown",
+    source: "Tailor Shop",
+    level: 87,
+    minutes: 210,
+    coins: 815,
+    ingredients: [
+      { name: "Silk Fabric", qty: 2 },
+      { name: "Pearls", qty: 5 },
+    ],
+  },
+  {
+    name: "Rubber",
+    source: "Rubber Factory",
+    level: 29,
+    minutes: 60,
+    coins: 26,
+    ingredients: [{ name: "Rubber Tree", qty: 1 }],
+  },
+  {
+    name: "Glue",
+    source: "Rubber Factory",
+    level: 52,
+    minutes: 120,
+    coins: 75,
+    ingredients: [{ name: "Rubber Tree", qty: 2 }],
+  },
+  {
+    name: "Paper",
+    source: "Paper Factory",
+    level: 18,
+    minutes: 90,
+    coins: 19,
+    ingredients: [{ name: "Pine Tree", qty: 1 }],
+  },
+  {
+    name: "Paper Towel",
+    source: "Paper Factory",
+    level: 23,
+    minutes: 150,
+    coins: 39,
+    ingredients: [{ name: "Pine Tree", qty: 2 }],
+  },
+  {
+    name: "Wallpaper",
+    source: "Paper Factory",
+    level: 30,
+    minutes: 180,
+    coins: 147,
+    ingredients: [
+      { name: "Pine Tree", qty: 2 },
+      { name: "Rubber", qty: 1 },
+    ],
+  },
+  {
+    name: "Book",
+    source: "Paper Factory",
+    level: 52,
+    minutes: 210,
+    coins: 304,
+    ingredients: [
+      { name: "Paper", qty: 4 },
+      { name: "Cotton Fabric", qty: 1 },
+      { name: "Glue", qty: 1 },
+    ],
+  },
+  {
+    name: "Tea Bags",
+    source: "Paper Factory",
+    level: 85,
+    minutes: 15,
+    coins: 93,
+    ingredients: [
+      { name: "Paper", qty: 1 },
+      { name: "Tea Plant", qty: 1 },
+    ],
+  },
+  {
+    name: "Muffin",
+    source: "Pastry Factory",
+    level: 24,
+    minutes: 30,
+    coins: 46,
+    ingredients: [
+      { name: "Sugar", qty: 1 },
+      { name: "Egg", qty: 4 },
+      { name: "Wheat", qty: 3 },
+    ],
+  },
+  {
+    name: "Cupcake",
+    source: "Pastry Factory",
+    level: 30,
+    minutes: 60,
+    coins: 61,
+    ingredients: [
+      { name: "Sugar", qty: 1 },
+      { name: "Egg", qty: 5 },
+      { name: "Cream", qty: 1 },
+    ],
+  },
+  {
+    name: "Donut",
+    source: "Pastry Factory",
+    level: 33,
+    minutes: 90,
+    coins: 88,
+    ingredients: [
+      { name: "Bagel", qty: 1 },
+      { name: "Caramel", qty: 1 },
+      { name: "Cacao", qty: 1 },
+    ],
+  },
+  {
+    name: "Ice Cream Cone",
+    source: "Ice Cream Factory",
+    level: 20,
+    minutes: 30,
+    coins: 32,
+    ingredients: [
+      { name: "Milk", qty: 1 },
+      { name: "Sugar", qty: 1 },
+      { name: "Cream", qty: 1 },
+    ],
+  },
+  {
+    name: "Popsicle",
+    source: "Ice Cream Factory",
+    level: 21,
+    minutes: 90,
+    coins: 44,
+    ingredients: [
+      { name: "Sugar", qty: 2 },
+      { name: "Strawberry", qty: 2 },
+    ],
+  },
+  {
+    name: "Popcorn",
+    source: "Snack Factory",
+    level: 8,
+    minutes: 30,
+    coins: 10,
+    ingredients: [{ name: "Corn", qty: 2 }],
+  },
+  {
+    name: "Corn Chips",
+    source: "Snack Factory",
+    level: 19,
+    minutes: 60,
+    coins: 15,
+    ingredients: [{ name: "Corn", qty: 3 }],
+  },
+  {
+    name: "Granola",
+    source: "Snack Factory",
+    level: 23,
+    minutes: 90,
+    coins: 45,
+    ingredients: [
+      { name: "Wheat", qty: 2 },
+      { name: "Strawberry", qty: 2 },
+    ],
+  },
+  {
+    name: "Potato Chips",
+    source: "Snack Factory",
+    level: 29,
+    minutes: 120,
+    coins: 50,
+    ingredients: [{ name: "Potato", qty: 2 }],
+  },
+  {
+    name: "Canape",
+    source: "Snack Factory",
+    level: 46,
+    minutes: 90,
+    coins: 69,
+    ingredients: [
+      { name: "Bread", qty: 1 },
+      { name: "Cheese", qty: 2 },
+      { name: "Olives", qty: 2 },
+    ],
+  },
+  {
+    name: "Glazed Bacon",
+    source: "Snack Factory",
+    level: 54,
+    minutes: 240,
+    coins: 75,
+    ingredients: [
+      { name: "Bacon", qty: 2 },
+      { name: "Caramel", qty: 1 },
+    ],
+  },
+  {
+    name: "Puffed Rice",
+    source: "Snack Factory",
+    level: 57,
+    minutes: 90,
+    coins: 52,
+    ingredients: [
+      { name: "Rice", qty: 4 },
+      { name: "Syrup", qty: 1 },
+    ],
+  },
+  {
+    name: "Dried Mushrooms",
+    source: "Snack Factory",
+    level: 63,
+    minutes: 150,
+    coins: 55,
+    ingredients: [{ name: "Mushroom", qty: 3 }],
+  },
+  {
+    name: "Salted Peanuts",
+    source: "Snack Factory",
+    level: 66,
+    minutes: 60,
+    coins: 58,
+    ingredients: [{ name: "Peanut Plant", qty: 3 }],
+  },
+  {
+    name: "Milkshake",
+    source: "Fast Food Restaurant",
+    level: 13,
+    minutes: 15,
+    coins: 22,
+    ingredients: [
+      { name: "Milk", qty: 2 },
+      { name: "Strawberry", qty: 1 },
+    ],
+  },
+  {
+    name: "Cheeseburger",
+    source: "Fast Food Restaurant",
+    level: 19,
+    minutes: 30,
+    coins: 48,
+    ingredients: [
+      { name: "Bread", qty: 2 },
+      { name: "Cheese", qty: 1 },
+      { name: "Tomato", qty: 1 },
+    ],
+  },
+  {
+    name: "Sandwich",
+    source: "Fast Food Restaurant",
+    level: 23,
+    minutes: 60,
+    coins: 52,
+    ingredients: [
+      { name: "Bread", qty: 2 },
+      { name: "Butter", qty: 1 },
+      { name: "Strawberry", qty: 2 },
+    ],
+  },
+  {
+    name: "French Fries",
+    source: "Fast Food Restaurant",
+    level: 25,
+    minutes: 45,
+    coins: 55,
+    ingredients: [
+      { name: "Potato", qty: 2 },
+      { name: "Cream", qty: 1 },
+    ],
+  },
+  {
+    name: "Baked Potato",
+    source: "Fast Food Restaurant",
+    level: 28,
+    minutes: 45,
+    coins: 80,
+    ingredients: [
+      { name: "Potato", qty: 2 },
+      { name: "Cheese", qty: 2 },
+    ],
+  },
+  {
+    name: "Fish Burger",
+    source: "Fast Food Restaurant",
+    level: 30,
+    minutes: 90,
+    coins: 110,
+    ingredients: [
+      { name: "Bread", qty: 2 },
+      { name: "Fish", qty: 1 },
+      { name: "Pepper", qty: 2 },
+    ],
+  },
+  {
+    name: "Fish and Chips",
+    source: "Fast Food Restaurant",
+    level: 41,
+    minutes: 120,
+    coins: 130,
+    ingredients: [
+      { name: "Fish", qty: 2 },
+      { name: "Potato", qty: 2 },
+    ],
+  },
+  {
+    name: "Peanut Butter",
+    source: "Snack Factory",
+    level: 62,
+    minutes: 60,
+    coins: 48,
+    ingredients: [{ name: "Peanut Plant", qty: 2 }],
+  },
+  {
+    name: "Peanut Butter Crepes",
+    source: "Fast Food Restaurant",
+    level: 63,
+    minutes: 90,
+    coins: 115,
+    ingredients: [
+      { name: "Bread", qty: 2 },
+      { name: "Peanut Butter", qty: 1 },
+      { name: "Banana", qty: 2 },
+    ],
+  },
+  {
+    name: "Honey",
+    source: "Apiary",
+    level: 13,
+    minutes: 120,
+    coins: 18,
+    ingredients: [],
+  },
+  {
+    name: "Beeswax",
+    source: "Apiary",
+    level: 25,
+    minutes: 180,
+    coins: 35,
+    ingredients: [{ name: "Honey", qty: 2 }],
+  },
+  {
+    name: "Jam",
+    source: "Jam House",
+    level: 19,
+    minutes: 90,
+    coins: 28,
+    ingredients: [{ name: "Strawberry", qty: 2 }],
+  },
+  {
+    name: "Marmalade",
+    source: "Jam House",
+    level: 32,
+    minutes: 150,
+    coins: 65,
+    ingredients: [{ name: "Orange", qty: 3 }],
+  },
+  {
+    name: "Orange",
+    source: "Field",
+    level: 28,
+    minutes: 180,
+    coins: 7,
+    ingredients: [],
+  },
+  {
+    name: "Apple",
+    source: "Field",
+    level: 24,
+    minutes: 120,
+    coins: 6,
+    ingredients: [],
+  },
+  {
+    name: "Lemon",
+    source: "Field",
+    level: 31,
+    minutes: 180,
+    coins: 8,
+    ingredients: [],
+  },
+  {
+    name: "Grape",
+    source: "Field",
+    level: 27,
+    minutes: 150,
+    coins: 7,
+    ingredients: [],
+  },
+  {
+    name: "Wine",
+    source: "Vineyard",
+    level: 35,
+    minutes: 240,
+    coins: 42,
+    ingredients: [{ name: "Grape", qty: 3 }],
+  },
+  {
+    name: "Whiskey",
+    source: "Distillery",
+    level: 45,
+    minutes: 300,
+    coins: 75,
+    ingredients: [
+      { name: "Grape", qty: 4 },
+      { name: "Sugar", qty: 2 },
+    ],
+  },
+  {
+    name: "Soy Sauce",
+    source: "Soy Sauce Factory",
+    level: 42,
+    minutes: 180,
+    coins: 48,
+    ingredients: [{ name: "Corn", qty: 4 }],
+  },
+  {
+    name: "Cacao",
+    source: "Tropical Isle",
+    level: 29,
+    minutes: 480,
+    coins: 12,
+    ingredients: [],
+  },
 ];
 
 const state = loadState();
 const byId = (id) => document.getElementById(id);
-const itemMap = () => new Map(state.items.map((item) => [item.name.toLowerCase(), item]));
+const itemMap = () =>
+  new Map(state.items.map((item) => [item.name.toLowerCase(), item]));
 
 function loadState() {
   const stored = localStorage.getItem(STORAGE_KEY);
@@ -112,16 +993,30 @@ function loadState() {
       orders: Array.isArray(parsed.orders) ? parsed.orders : [],
       inventory: parsed.inventory || {},
       completed: parsed.completed || {},
-      capacity: Number(parsed.capacity) || 50
+      capacity: Number(parsed.capacity) || 50,
     });
   }
-  return { items: seedItems, orders: [], inventory: {}, completed: {}, capacity: 50 };
+  return {
+    items: seedItems,
+    orders: [],
+    inventory: {},
+    completed: {},
+    capacity: 50,
+  };
 }
 
 function syncSeedItems(data) {
-  const managedNames = new Set(seedItems.map((item) => item.name.toLowerCase()));
-  const customItems = data.items.filter((item) => !managedNames.has(String(item.name || "").toLowerCase()));
-  return { ...data, capacity: Number(data.capacity) || 50, items: [...seedItems, ...customItems] };
+  const managedNames = new Set(
+    seedItems.map((item) => item.name.toLowerCase()),
+  );
+  const customItems = data.items.filter(
+    (item) => !managedNames.has(String(item.name || "").toLowerCase()),
+  );
+  return {
+    ...data,
+    capacity: Number(data.capacity) || 50,
+    items: [...seedItems, ...customItems],
+  };
 }
 
 function saveState() {
@@ -134,38 +1029,52 @@ function normalizeImportedState(data) {
   }
 
   return {
-    items: data.items.map((item) => ({
-      name: String(item.name || "").trim(),
-      source: String(item.source || "Unknown").trim(),
-      level: Number(item.level) || 1,
-      minutes: Number(item.minutes) || 0,
-      coins: Number(item.coins) || 0,
-      ingredients: Array.isArray(item.ingredients)
-        ? item.ingredients.map((ingredient) => ({
-            name: String(ingredient.name || "").trim(),
-            qty: Number(ingredient.qty) || 1
-          })).filter((ingredient) => ingredient.name)
-        : []
-    })).filter((item) => item.name),
-    orders: data.orders.map((order) => ({
-      id: String(order.id || uid()),
-      type: order.type === "train" ? "train" : "helicopter",
-      name: String(order.name || "Imported order").trim(),
-      coins: Number(order.coins) || 0,
-      xp: Number(order.xp) || 0,
-      reward: String(order.reward || "").trim(),
-      items: Array.isArray(order.items)
-        ? order.items.map((line) => ({
-            name: String(line.name || "").trim(),
-            qty: Number(line.qty) || 1
-          })).filter((line) => line.name)
-        : [],
-      done: Boolean(order.done),
-      createdAt: Number(order.createdAt) || Date.now()
-    })).filter((order) => order.items.length),
-    inventory: typeof data.inventory === "object" && data.inventory ? data.inventory : {},
-    completed: typeof data.completed === "object" && data.completed ? data.completed : {},
-    capacity: Number(data.capacity) || 50
+    items: data.items
+      .map((item) => ({
+        name: String(item.name || "").trim(),
+        source: String(item.source || "Unknown").trim(),
+        level: Number(item.level) || 1,
+        minutes: Number(item.minutes) || 0,
+        coins: Number(item.coins) || 0,
+        ingredients: Array.isArray(item.ingredients)
+          ? item.ingredients
+              .map((ingredient) => ({
+                name: String(ingredient.name || "").trim(),
+                qty: Number(ingredient.qty) || 1,
+              }))
+              .filter((ingredient) => ingredient.name)
+          : [],
+      }))
+      .filter((item) => item.name),
+    orders: data.orders
+      .map((order) => ({
+        id: String(order.id || uid()),
+        type: order.type === "train" ? "train" : "helicopter",
+        name: String(order.name || "Imported order").trim(),
+        coins: Number(order.coins) || 0,
+        xp: Number(order.xp) || 0,
+        reward: String(order.reward || "").trim(),
+        items: Array.isArray(order.items)
+          ? order.items
+              .map((line) => ({
+                name: String(line.name || "").trim(),
+                qty: Number(line.qty) || 1,
+              }))
+              .filter((line) => line.name)
+          : [],
+        done: Boolean(order.done),
+        createdAt: Number(order.createdAt) || Date.now(),
+      }))
+      .filter((order) => order.items.length),
+    inventory:
+      typeof data.inventory === "object" && data.inventory
+        ? data.inventory
+        : {},
+    completed:
+      typeof data.completed === "object" && data.completed
+        ? data.completed
+        : {},
+    capacity: Number(data.capacity) || 50,
   };
 }
 
@@ -188,12 +1097,15 @@ function formatMinutes(minutes) {
 
 function parseIngredients(value) {
   if (!value.trim()) return [];
-  return value.split(",").map((part) => {
-    const clean = part.trim();
-    const match = clean.match(/^(\d+)\s+(.+)$/);
-    if (!match) return { qty: 1, name: clean };
-    return { qty: Number(match[1]), name: match[2].trim() };
-  }).filter((ingredient) => ingredient.name);
+  return value
+    .split(",")
+    .map((part) => {
+      const clean = part.trim();
+      const match = clean.match(/^(\d+)\s+(.+)$/);
+      if (!match) return { qty: 1, name: clean };
+      return { qty: Number(match[1]), name: match[2].trim() };
+    })
+    .filter((ingredient) => ingredient.name);
 }
 
 function ingredientText(ingredients) {
@@ -203,7 +1115,10 @@ function ingredientText(ingredients) {
 }
 
 function inventoryUsed() {
-  return Object.values(state.inventory).reduce((sum, qty) => sum + Math.max(0, Number(qty) || 0), 0);
+  return Object.values(state.inventory).reduce(
+    (sum, qty) => sum + Math.max(0, Number(qty) || 0),
+    0,
+  );
 }
 
 function addOrderLine(name = "", qty = 1) {
@@ -236,14 +1151,25 @@ function productionMinutesForItem(name, qty, nested = false, seen = new Set()) {
   if (!nested) return direct;
   seen.add(name.toLowerCase());
   const ingredientMinutes = item.ingredients.reduce((sum, ingredient) => {
-    return sum + productionMinutesForItem(ingredient.name, ingredient.qty * qty, true, seen);
+    return (
+      sum +
+      productionMinutesForItem(
+        ingredient.name,
+        ingredient.qty * qty,
+        true,
+        seen,
+      )
+    );
   }, 0);
   seen.delete(name.toLowerCase());
   return direct + ingredientMinutes;
 }
 
 function orderStats(order) {
-  const minutes = order.items.reduce((sum, line) => sum + productionMinutesForItem(line.name, line.qty, true), 0);
+  const minutes = order.items.reduce(
+    (sum, line) => sum + productionMinutesForItem(line.name, line.qty, true),
+    0,
+  );
   const value = order.coins + Math.round(order.xp * 0.5);
   const score = minutes > 0 ? value / minutes : value;
   return { minutes, value, score };
@@ -258,13 +1184,17 @@ function aggregateDemand(nested) {
     const item = itemMap().get(key);
     if (!item || seen.has(key)) return;
     seen.add(key);
-    item.ingredients.forEach((ingredient) => add(ingredient.name, ingredient.qty * qty, true, seen));
+    item.ingredients.forEach((ingredient) =>
+      add(ingredient.name, ingredient.qty * qty, true, seen),
+    );
     seen.delete(key);
   };
 
   state.orders
     .filter((order) => !order.done)
-    .forEach((order) => order.items.forEach((line) => add(line.name, line.qty, nested)));
+    .forEach((order) =>
+      order.items.forEach((line) => add(line.name, line.qty, nested)),
+    );
 
   return demand;
 }
@@ -278,7 +1208,9 @@ function addDemand(demand, name, qty, nested, seen = new Set()) {
   if (!item || seen.has(key)) return;
 
   seen.add(key);
-  item.ingredients.forEach((ingredient) => addDemand(demand, ingredient.name, ingredient.qty * qty, true, seen));
+  item.ingredients.forEach((ingredient) =>
+    addDemand(demand, ingredient.name, ingredient.qty * qty, true, seen),
+  );
   seen.delete(key);
 }
 
@@ -293,7 +1225,7 @@ function orderMissingItems(order) {
       have,
       missing,
       item,
-      minutes: productionMinutesForItem(name, missing, false)
+      minutes: productionMinutesForItem(name, missing, false),
     };
   });
 }
@@ -306,13 +1238,26 @@ function missingIngredientsForOrder(order, nested) {
       const item = itemMap().get(entry.name.toLowerCase());
       if (!item) return;
       item.ingredients.forEach((ingredient) => {
-        addDemand(demand, ingredient.name, ingredient.qty * entry.missing, nested);
+        addDemand(
+          demand,
+          ingredient.name,
+          ingredient.qty * entry.missing,
+          nested,
+        );
       });
     });
   return demand;
 }
 
-function addProductionDemand(demand, name, qty, nested, alreadyNet, orderName, seen = new Set()) {
+function addProductionDemand(
+  demand,
+  name,
+  qty,
+  nested,
+  alreadyNet,
+  orderName,
+  seen = new Set(),
+) {
   if (qty <= 0) return;
   const key = name.toLowerCase();
   if (!demand[key]) {
@@ -322,7 +1267,7 @@ function addProductionDemand(demand, name, qty, nested, alreadyNet, orderName, s
       item,
       alreadyNetQty: 0,
       grossQty: 0,
-      orders: new Set()
+      orders: new Set(),
     };
   }
 
@@ -336,7 +1281,15 @@ function addProductionDemand(demand, name, qty, nested, alreadyNet, orderName, s
 
   seen.add(key);
   item.ingredients.forEach((ingredient) => {
-    addProductionDemand(demand, ingredient.name, ingredient.qty * qty, true, false, "", seen);
+    addProductionDemand(
+      demand,
+      ingredient.name,
+      ingredient.qty * qty,
+      true,
+      false,
+      "",
+      seen,
+    );
   });
   seen.delete(key);
 }
@@ -349,52 +1302,75 @@ function buildProductionDemand(nested) {
       orderMissingItems(order)
         .filter((entry) => entry.missing > 0)
         .forEach((entry) => {
-          addProductionDemand(demand, entry.name, entry.missing, nested, true, order.name);
+          addProductionDemand(
+            demand,
+            entry.name,
+            entry.missing,
+            nested,
+            true,
+            order.name,
+          );
         });
     });
 
-  return Object.values(demand).map((entry) => {
-    const have = state.inventory[entry.name] || 0;
-    const makeFromGross = Math.max(0, entry.grossQty - have);
-    const make = entry.alreadyNetQty + makeFromGross;
-    return {
-      ...entry,
-      have,
-      make,
-      demandQty: entry.alreadyNetQty + entry.grossQty,
-      minutes: productionMinutesForItem(entry.name, make, false),
-      orders: [...entry.orders]
-    };
-  }).filter((entry) => entry.make > 0);
+  return Object.values(demand)
+    .map((entry) => {
+      const have = state.inventory[entry.name] || 0;
+      const makeFromGross = Math.max(0, entry.grossQty - have);
+      const make = entry.alreadyNetQty + makeFromGross;
+      return {
+        ...entry,
+        have,
+        make,
+        demandQty: entry.alreadyNetQty + entry.grossQty,
+        minutes: productionMinutesForItem(entry.name, make, false),
+        orders: [...entry.orders],
+      };
+    })
+    .filter((entry) => entry.make > 0);
 }
 
 function renderDatalist() {
   const itemOptions = state.items
     .slice()
-    .sort((a, b) => (a.source || "Unknown").localeCompare(b.source || "Unknown") || a.name.localeCompare(b.name));
+    .sort(
+      (a, b) =>
+        (a.source || "Unknown").localeCompare(b.source || "Unknown") ||
+        a.name.localeCompare(b.name),
+    );
   const groupedOptions = itemOptions.reduce((markup, item, index, list) => {
     const source = item.source || "Unknown";
     const previousSource = list[index - 1]?.source || "Unknown";
     const nextSource = list[index + 1]?.source || "Unknown";
-    const open = index === 0 || source !== previousSource ? `<optgroup label="${source}">` : "";
-    const close = index === list.length - 1 || source !== nextSource ? "</optgroup>" : "";
+    const open =
+      index === 0 || source !== previousSource
+        ? `<optgroup label="${source}">`
+        : "";
+    const close =
+      index === list.length - 1 || source !== nextSource ? "</optgroup>" : "";
     return `${markup}${open}<option value="${item.name}">${item.name}</option>${close}`;
   }, "");
   byId("itemNames").innerHTML = state.items
     .map((item) => `<option value="${item.name}"></option>`)
     .join("");
-  byId("inventoryItem").innerHTML = `<option value="">Select item</option>${groupedOptions}<option value="__custom">Custom item...</option>`;
+  byId("inventoryItem").innerHTML =
+    `<option value="">Select item</option>${groupedOptions}<option value="__custom">Custom item...</option>`;
 }
 
 function renderInventory() {
   byId("barnCapacity").value = state.capacity;
-  const entries = Object.entries(state.inventory).filter(([, qty]) => qty > 0).sort(([a], [b]) => a.localeCompare(b));
+  const entries = Object.entries(state.inventory)
+    .filter(([, qty]) => qty > 0)
+    .sort(([a], [b]) => a.localeCompare(b));
   const query = byId("inventorySearch").value.trim().toLowerCase();
-  const filtered = entries.filter(([name]) => !query || name.toLowerCase().includes(query));
+  const filtered = entries.filter(
+    ([name]) => !query || name.toLowerCase().includes(query),
+  );
   byId("inventoryList").innerHTML = entries.length
-    ? filtered.map(([name, qty]) => {
-        const item = itemMap().get(name.toLowerCase());
-        return `
+    ? filtered
+        .map(([name, qty]) => {
+          const item = itemMap().get(name.toLowerCase());
+          return `
           <article class="inventory-row">
             <div>
               <strong>${name}</strong>
@@ -408,7 +1384,9 @@ function renderInventory() {
             </div>
           </article>
         `;
-      }).join("") || `<div class="empty">No inventory matches that search.</div>`
+        })
+        .join("") ||
+      `<div class="empty">No inventory matches that search.</div>`
     : `<div class="empty">No inventory entered yet.</div>`;
 }
 
@@ -423,9 +1401,11 @@ function renderOrders() {
     return bs.score - as.score;
   });
 
-  byId("ordersList").innerHTML = orders.length ? orders.map((order) => {
-    const stats = orderStats(order);
-    return `
+  byId("ordersList").innerHTML = orders.length
+    ? orders
+        .map((order) => {
+          const stats = orderStats(order);
+          return `
       <article class="order-card ${order.done ? "done" : ""}">
         <div>
           <div class="card-title">
@@ -447,16 +1427,21 @@ function renderOrders() {
         </div>
       </article>
     `;
-  }).join("") : `<div class="empty">Add helicopter or train orders to start ranking them.</div>`;
+        })
+        .join("")
+    : `<div class="empty">Add helicopter or train orders to start ranking them.</div>`;
 }
 
 function renderProduction() {
   const nested = byId("includeNested").checked;
-  const entries = buildProductionDemand(nested)
-    .sort((a, b) => {
-      const sourceCompare = (a.item?.source || "Unknown source").localeCompare(b.item?.source || "Unknown source");
-      return sourceCompare || b.minutes - a.minutes || a.name.localeCompare(b.name);
-    });
+  const entries = buildProductionDemand(nested).sort((a, b) => {
+    const sourceCompare = (a.item?.source || "Unknown source").localeCompare(
+      b.item?.source || "Unknown source",
+    );
+    return (
+      sourceCompare || b.minutes - a.minutes || a.name.localeCompare(b.name)
+    );
+  });
 
   const groups = entries.reduce((acc, entry) => {
     const source = entry.item?.source || "Unknown source";
@@ -466,10 +1451,14 @@ function renderProduction() {
   }, {});
 
   byId("productionPlan").innerHTML = entries.length
-    ? Object.entries(groups).map(([source, items]) => {
-        const totalItems = items.reduce((sum, item) => sum + item.make, 0);
-        const totalMinutes = items.reduce((sum, item) => sum + item.minutes, 0);
-        return `
+    ? Object.entries(groups)
+        .map(([source, items]) => {
+          const totalItems = items.reduce((sum, item) => sum + item.make, 0);
+          const totalMinutes = items.reduce(
+            (sum, item) => sum + item.minutes,
+            0,
+          );
+          return `
           <article class="factory-card">
             <div class="factory-head">
               <div>
@@ -478,7 +1467,9 @@ function renderProduction() {
               </div>
             </div>
             <div class="factory-items">
-              ${items.map((entry) => `
+              ${items
+                .map(
+                  (entry) => `
                 <div class="factory-row">
                   <div>
                     <strong>${entry.name}</strong>
@@ -492,17 +1483,23 @@ function renderProduction() {
                   </div>
                   <button data-complete-item="${entry.name}" type="button">+1 made</button>
                 </div>
-              `).join("")}
+              `,
+                )
+                .join("")}
             </div>
           </article>
         `;
-      }).join("")
+        })
+        .join("")
     : `<div class="empty">Add active orders to see missing items grouped by factory.</div>`;
 
   byId("ingredientDemand").innerHTML = entries.length
     ? entries
         .sort((a, b) => b.make - a.make || a.name.localeCompare(b.name))
-        .map((entry) => `<span class="pill">${entry.name}: make ${entry.make}</span>`)
+        .map(
+          (entry) =>
+            `<span class="pill">${entry.name}: make ${entry.make}</span>`,
+        )
         .join("")
     : `<div class="empty">Everything requested is covered by inventory.</div>`;
 }
@@ -510,29 +1507,53 @@ function renderProduction() {
 function renderCatalog() {
   const query = byId("catalogSearch").value.trim().toLowerCase();
   const items = state.items
-    .filter((item) => !query || item.name.toLowerCase().includes(query) || item.source.toLowerCase().includes(query))
-    .sort((a, b) => a.level - b.level || a.source.localeCompare(b.source) || a.name.localeCompare(b.name));
+    .filter(
+      (item) =>
+        !query ||
+        item.name.toLowerCase().includes(query) ||
+        item.source.toLowerCase().includes(query),
+    )
+    .sort(
+      (a, b) =>
+        a.level - b.level ||
+        a.source.localeCompare(b.source) ||
+        a.name.localeCompare(b.name),
+    );
 
-  byId("catalogList").innerHTML = items.map((item) => `
+  byId("catalogList").innerHTML = items
+    .map(
+      (item) => `
     <article class="catalog-row">
       <div><strong>${item.name}</strong><div class="muted">Level ${item.level || "-"}</div></div>
       <div>${item.source || "Unknown"}<div class="muted">${formatMinutes(item.minutes)} production</div></div>
       <div class="muted">${ingredientText(item.ingredients)}</div>
       <button data-edit-item="${item.name}" type="button">Edit</button>
     </article>
-  `).join("");
+  `,
+    )
+    .join("");
 }
 
 function renderSummary() {
   const activeOrders = state.orders.filter((order) => !order.done);
   const demand = aggregateDemand(false);
   const queueMinutes = Object.entries(demand).reduce((sum, [name, qty]) => {
-    return sum + productionMinutesForItem(name, Math.max(0, qty - (state.inventory[name] || 0)), false);
+    return (
+      sum +
+      productionMinutesForItem(
+        name,
+        Math.max(0, qty - (state.inventory[name] || 0)),
+        false,
+      )
+    );
   }, 0);
   const used = inventoryUsed();
   const remaining = state.capacity - used;
   byId("activeOrdersCount").textContent = activeOrders.length;
-  byId("neededItemsCount").textContent = Object.values(demand).reduce((a, b) => a + b, 0);
+  byId("neededItemsCount").textContent = Object.values(demand).reduce(
+    (a, b) => a + b,
+    0,
+  );
   byId("queueHours").textContent = formatMinutes(queueMinutes);
   byId("barnSpace").textContent = `${remaining}/${state.capacity}`;
   byId("barnSpace").classList.toggle("over-capacity", remaining < 0);
@@ -550,7 +1571,9 @@ function renderAll() {
 
 document.querySelectorAll(".tab").forEach((tab) => {
   tab.addEventListener("click", () => {
-    document.querySelectorAll(".tab, .view").forEach((el) => el.classList.remove("active"));
+    document
+      .querySelectorAll(".tab, .view")
+      .forEach((el) => el.classList.remove("active"));
     tab.classList.add("active");
     byId(`${tab.dataset.view}View`).classList.add("active");
   });
@@ -560,10 +1583,12 @@ byId("addOrderLine").addEventListener("click", () => addOrderLine());
 
 byId("orderForm").addEventListener("submit", (event) => {
   event.preventDefault();
-  const items = [...document.querySelectorAll(".order-line")].map((row) => ({
-    name: row.querySelector(".line-name").value.trim(),
-    qty: Number(row.querySelector(".line-qty").value)
-  })).filter((line) => line.name && line.qty > 0);
+  const items = [...document.querySelectorAll(".order-line")]
+    .map((row) => ({
+      name: row.querySelector(".line-name").value.trim(),
+      qty: Number(row.querySelector(".line-qty").value),
+    }))
+    .filter((line) => line.name && line.qty > 0);
 
   if (!items.length) return;
 
@@ -576,7 +1601,7 @@ byId("orderForm").addEventListener("submit", (event) => {
     reward: byId("orderReward").value.trim(),
     items,
     done: false,
-    createdAt: Date.now()
+    createdAt: Date.now(),
   });
 
   event.target.reset();
@@ -620,9 +1645,11 @@ byId("catalogForm").addEventListener("submit", (event) => {
     level: Number(byId("catalogLevel").value) || 1,
     minutes: Number(byId("catalogMinutes").value) || 0,
     coins: Number(byId("catalogCoins").value) || 0,
-    ingredients: parseIngredients(byId("catalogIngredients").value)
+    ingredients: parseIngredients(byId("catalogIngredients").value),
   };
-  const existingIndex = state.items.findIndex((item) => item.name.toLowerCase() === name.toLowerCase());
+  const existingIndex = state.items.findIndex(
+    (item) => item.name.toLowerCase() === name.toLowerCase(),
+  );
   if (existingIndex >= 0) state.items[existingIndex] = nextItem;
   else state.items.push(nextItem);
   event.target.reset();
@@ -659,14 +1686,19 @@ document.addEventListener("click", (event) => {
       byId("catalogLevel").value = item.level;
       byId("catalogMinutes").value = item.minutes;
       byId("catalogCoins").value = item.coins;
-      byId("catalogIngredients").value = ingredientText(item.ingredients) === "No ingredients" ? "" : ingredientText(item.ingredients);
+      byId("catalogIngredients").value =
+        ingredientText(item.ingredients) === "No ingredients"
+          ? ""
+          : ingredientText(item.ingredients);
       document.querySelector('[data-view="catalog"]').click();
     }
     changed = true;
   }
   if (itemToComplete) {
-    state.completed[itemToComplete] = (state.completed[itemToComplete] || 0) + 1;
-    state.inventory[itemToComplete] = (state.inventory[itemToComplete] || 0) + 1;
+    state.completed[itemToComplete] =
+      (state.completed[itemToComplete] || 0) + 1;
+    state.inventory[itemToComplete] =
+      (state.inventory[itemToComplete] || 0) + 1;
     changed = true;
   }
   if (inventoryToRemove) {
@@ -675,8 +1707,12 @@ document.addEventListener("click", (event) => {
   }
   if (inventoryToAdjust) {
     const delta = Number(target.dataset.delta) || 0;
-    state.inventory[inventoryToAdjust] = Math.max(0, (state.inventory[inventoryToAdjust] || 0) + delta);
-    if (state.inventory[inventoryToAdjust] === 0) delete state.inventory[inventoryToAdjust];
+    state.inventory[inventoryToAdjust] = Math.max(
+      0,
+      (state.inventory[inventoryToAdjust] || 0) + delta,
+    );
+    if (state.inventory[inventoryToAdjust] === 0)
+      delete state.inventory[inventoryToAdjust];
     changed = true;
   }
   if (changed) renderAll();
@@ -697,7 +1733,11 @@ byId("resetData").addEventListener("click", () => {
 });
 
 byId("exportData").addEventListener("click", () => {
-  const payload = JSON.stringify({ ...state, exportedAt: new Date().toISOString() }, null, 2);
+  const payload = JSON.stringify(
+    { ...state, exportedAt: new Date().toISOString() },
+    null,
+    2,
+  );
   const blob = new Blob([payload], { type: "application/json" });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
@@ -716,7 +1756,9 @@ byId("importData").addEventListener("change", async (event) => {
   if (!file) return;
 
   try {
-    const imported = syncSeedItems(normalizeImportedState(JSON.parse(await file.text())));
+    const imported = syncSeedItems(
+      normalizeImportedState(JSON.parse(await file.text())),
+    );
     Object.assign(state, imported);
     renderAll();
     setBackupStatus("Backup imported.");
