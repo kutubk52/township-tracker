@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Township Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Township production planner</p>
+          <h1>Orders, ingredients, and production timing</h1>
+        </div>
+        <div class="summary-strip" aria-label="Order summary">
+          <div>
+            <span id="activeOrdersCount">0</span>
+            <small>active orders</small>
+          </div>
+          <div>
+            <span id="neededItemsCount">0</span>
+            <small>items needed</small>
+          </div>
+          <div>
+            <span id="queueHours">0h</span>
+            <small>factory time</small>
+          </div>
+          <div>
+            <span id="barnSpace">0/50</span>
+            <small>barn space left</small>
+          </div>
+        </div>
+      </header>
+
+      <section class="workspace">
+        <aside class="sidebar">
+          <nav class="tabs" aria-label="Tracker views">
+            <button class="tab active" data-view="orders" type="button">Orders</button>
+            <button class="tab" data-view="inventory" type="button">Inventory</button>
+            <button class="tab" data-view="production" type="button">Production</button>
+            <button class="tab" data-view="catalog" type="button">Catalogue</button>
+          </nav>
+
+          <section class="panel">
+            <div class="section-title tight">
+              <div>
+                <p class="eyebrow">Keep a copy</p>
+                <h2>Backup</h2>
+              </div>
+            </div>
+            <div class="backup-actions">
+              <button id="exportData" type="button">Export JSON</button>
+              <label class="file-button">
+                Import JSON
+                <input id="importData" type="file" accept="application/json,.json">
+              </label>
+            </div>
+            <p id="backupStatus" class="status-text" role="status"></p>
+          </section>
+        </aside>
+
+        <section class="view" id="inventoryView">
+          <section class="panel">
+            <div class="section-title">
+              <div>
+                <p class="eyebrow">What is already in your barn</p>
+                <h2>Add inventory</h2>
+              </div>
+            </div>
+            <form id="capacityForm" class="capacity-form">
+              <label>
+                Barn capacity
+                <input id="barnCapacity" type="number" min="1" step="1" value="50" required>
+              </label>
+              <button type="submit">Update size</button>
+            </form>
+            <form id="inventoryForm" class="inventory-form">
+              <label>
+                Item
+                <input id="inventoryItem" list="itemNames" autocomplete="off" required>
+              </label>
+              <label>
+                Quantity you have
+                <input id="inventoryQty" type="number" min="0" step="1" value="0" required>
+              </label>
+              <button class="primary" type="submit">Save inventory</button>
+            </form>
+          </section>
+
+          <section class="panel">
+            <div class="section-title">
+              <div>
+                <p class="eyebrow">Current stock</p>
+                <h2>Inventory items</h2>
+              </div>
+              <input id="inventorySearch" placeholder="Search inventory" aria-label="Search inventory">
+            </div>
+            <div id="inventoryList" class="inventory-list"></div>
+          </section>
+        </section>
+
+        <section class="view active" id="ordersView">
+          <section class="panel order-entry">
+            <div class="section-title">
+              <div>
+                <p class="eyebrow">Capture latest requests</p>
+                <h2>Add order</h2>
+              </div>
+              <div class="segmented" role="radiogroup" aria-label="Order type">
+                <label><input type="radio" name="orderType" value="helicopter" checked> Helicopter</label>
+                <label><input type="radio" name="orderType" value="train"> Train</label>
+              </div>
+            </div>
+
+            <form id="orderForm" class="order-form">
+              <label>
+                Order name
+                <input id="orderName" placeholder="Customer, train 1, or note" required>
+              </label>
+              <label>
+                Coins
+                <input id="orderCoins" type="number" min="0" step="1" value="0">
+              </label>
+              <label>
+                XP
+                <input id="orderXp" type="number" min="0" step="1" value="0">
+              </label>
+              <label>
+                Other reward
+                <input id="orderReward" placeholder="Materials, tools, event points">
+              </label>
+
+              <div class="line-items">
+                <div class="line-heading">
+                  <span>Requested items</span>
+                  <button id="addOrderLine" type="button">Add item</button>
+                </div>
+                <div id="orderLines"></div>
+              </div>
+
+              <button class="primary" type="submit">Save order</button>
+            </form>
+          </section>
+
+          <section class="panel">
+            <div class="section-title">
+              <div>
+                <p class="eyebrow">Prioritize by payoff</p>
+                <h2>Active orders</h2>
+              </div>
+              <select id="sortOrders" aria-label="Sort orders">
+                <option value="score">Best reward per minute</option>
+                <option value="coins">Most coins</option>
+                <option value="time">Least production time</option>
+                <option value="created">Newest first</option>
+              </select>
+            </div>
+            <div id="ordersList" class="orders-list"></div>
+          </section>
+        </section>
+
+        <section class="view" id="productionView">
+          <section class="panel">
+            <div class="section-title">
+              <div>
+                <p class="eyebrow">Grouped by building</p>
+                <h2>Production priorities</h2>
+              </div>
+              <label class="toggle">
+                <input id="includeNested" type="checkbox" checked>
+                Nested ingredients
+              </label>
+            </div>
+            <div id="productionPlan" class="production-grid"></div>
+          </section>
+
+          <section class="panel">
+            <div class="section-title">
+              <div>
+                <p class="eyebrow">Across all active orders</p>
+                <h2>Overall missing items</h2>
+              </div>
+            </div>
+            <div id="ingredientDemand" class="ingredient-list"></div>
+          </section>
+        </section>
+
+        <section class="view" id="catalogView">
+          <section class="panel">
+            <div class="section-title">
+              <div>
+                <p class="eyebrow">Adjust as your town unlocks</p>
+                <h2>Add or update item</h2>
+              </div>
+              <button id="resetData" type="button">Reset sample data</button>
+            </div>
+            <form id="catalogForm" class="catalog-form">
+              <label>
+                Item name
+                <input id="catalogName" list="itemNames" autocomplete="off" required>
+              </label>
+              <label>
+                Factory/source
+                <input id="catalogFactory" placeholder="Bakery, Dairy Factory, Crop">
+              </label>
+              <label>
+                Level
+                <input id="catalogLevel" type="number" min="1" step="1">
+              </label>
+              <label>
+                Time minutes
+                <input id="catalogMinutes" type="number" min="0" step="1" value="0">
+              </label>
+              <label>
+                Sell coins
+                <input id="catalogCoins" type="number" min="0" step="1" value="0">
+              </label>
+              <label class="wide">
+                Ingredients
+                <input id="catalogIngredients" placeholder="2 Wheat, 1 Sugar">
+              </label>
+              <button class="primary" type="submit">Save item</button>
+            </form>
+          </section>
+
+          <section class="panel">
+            <div class="section-title">
+              <div>
+                <p class="eyebrow">Seeded from public tables</p>
+                <h2>Items</h2>
+              </div>
+              <input id="catalogSearch" placeholder="Search item or factory" aria-label="Search catalogue">
+            </div>
+            <div id="catalogList" class="catalog-list"></div>
+          </section>
+        </section>
+      </section>
+    </main>
+
+    <datalist id="itemNames"></datalist>
+    <script src="app.js"></script>
+  </body>
+</html>
